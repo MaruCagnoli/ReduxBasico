@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta charset="utf-8">
+      <title>Redux</title>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.0.4/redux.js"></script>
+  </head>
+  <body>
+      <div>
+          Valor: <span id="numero"></span>
+          <br/>
+          <button id="aum" onclick="aumentar()">Aumentar</button>
+          <button id="dis" onclick="disminuir()">Disminuir</button>
+
+      </div>
+      <script type="text/javascript">
+        
+        //REDUX GAME
+        var self = this;
+        
+        //I. STATE
+
+        var state = {
+          cantidad:0
+        }
+        
+        //II. STORE toma dos parametros(reducer,state)
+
+        var store = Redux.createStore(reducer, state);
+
+        //III. REDUCER es una funcion que regresa un nuevo estado y toma dos parametros, un state un un action
+
+        function reducer(state, action){
+          var nuevoEstado = Object.assign({},state);
+          if(action.type === 'AUM'){
+            nuevoEstado.cantidad = state.cantidad + 1;
+          }else if(action.type === 'DIS'){
+            nuevoEstado.cantidad = state.cantidad - 1;
+          }
+          return nuevoEstado;
+        }
+
+        //IV. ACTION es un objeto de js con el requisito de tener un key "type". 
+        //Se acciona a traves de un store.dispatch(action)
+
+        var actionAumentar = {
+          type: 'AUM'
+        }
+        var actionDisminuir = {
+          type: 'DIS'
+        }
+
+        //V. DISPATCH ejecuta la llamada al store y pasa el tipo de accion
+
+        var aumentar = ()=>{
+          store.dispatch(actionAumentar);
+
+        }
+        var disminuir = () =>{
+          store.dispatch(actionDisminuir);
+        }
+        var numero = document.getElementById('numero');
+        //VI. acceder al state a traves de la store
+        var mostrarNumero = ()=>{
+          numero.innerHTML = store.getState().cantidad;
+        }
+        mostrarNumero();
+        //VII. Suscribir el metodo que tiene o muestra el state para que se ejecute
+        //nuevamente cuando el store lo indique.
+
+        store.subscribe(mostrarNumero);
+
+
+      </script>
+  </body>
+</html>
